@@ -70,8 +70,8 @@ that is able to register with the hub, read memory data that is written to
 writing it to [0x6000]-[0x607f].
 
 This virtual NIC must speak the WebSockets protocol to connect to the hub. This
-is relatively in JavaScript using Socket.io, but should be doable in other
-implementation, too.
+is relatively simple in JavaScript using Socket.io, but should be doable in
+other emulator implementations, too.
 
 An example NIC can be found at:
 https://github.com/ManuelKiessling/jsDCPU16/blob/2f62c17a3d0ec1cf7a9e816a4924213882c35e71/app/NetworkInterfaceCard.js#L1
