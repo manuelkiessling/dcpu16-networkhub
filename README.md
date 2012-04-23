@@ -9,6 +9,8 @@ allows DCPU-16 emulators to exchange data.
 
 ## Demo
 
+__Note:__ Looks like there is currently a __problem with the demo__, I'm looking into it.
+
 To see the data exchange in action, open
 http://manuel.kiessling.net/dcpu16networkdemo/index.html?isSender=1
 in your browser. It will display a link to another machine - open this in
@@ -20,8 +22,6 @@ and echoes it to its console, and puts in on the network wire.
 
 The second machine puts up everything that arrives on the wire and
 displays it in its console.
-
-__Note:__ Looks like there is currently a problem with the demo, I'm looking into it.
 
 
 ## Caveats
