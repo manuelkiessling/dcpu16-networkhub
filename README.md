@@ -10,7 +10,7 @@ allows DCPU-16 emulators to exchange data.
 ## Demo
 
 To see the data exchange in action, open
-http://manuel.kiessling.net/dcpu16networkdemo/index.html?isSender=1
+http://188.40.187.185/index.html?isSender=1
 in your browser. It will display a link to another machine - open this in
 another browser window.
 
