@@ -1,12 +1,40 @@
 var util = require('util');
+var url = require('url');
+var mime = require('mime');
+var path = require('path');
+var fs = require('fs');
+
+var handler = function(request, response) {
+  var uriPath = url.parse(request.url).pathname;
+  var filename = path.join(__dirname + '/demo/', uriPath);
+  console.log(uriPath + ' -> ' + filename);
+
+  path.exists(filename, function(exists) {
+    if (!exists) {
+      response.writeHead(404, {'Content-Type': 'text/plain'});
+      response.write('404 Not Found\n');
+      response.end();
+      return;
+    }
+
+    fs.readFile(filename, 'binary', function(err, file) {
+      if (err) {
+        response.writeHead(500, {'Content-Type': 'text/plain'});
+        response.write(err + '\n');
+        response.end();
+        return;
+      }
+
+      response.writeHead(200, {'Content-Type': mime.lookup(filename)});
+      response.write(file, 'binary');
+      response.end();
+    });
+  });
+};
+
 var httpd = require('http').createServer(handler);
 var io = require('socket.io').listen(httpd);
-
 httpd.listen(80);
-
-function handler(req, res) {
-  //
-}
 
 var clients = {};
 

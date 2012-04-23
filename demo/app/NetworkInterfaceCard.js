@@ -19,7 +19,7 @@
 
 */
 
-define(['http://188.40.187.185:80/socket.io/socket.io.js'], function() {
+define(['/socket.io/socket.io.js'], function() {
 
   var increaseIndex = function(index) {
     index = index + 2;
@@ -36,7 +36,7 @@ define(['http://188.40.187.185:80/socket.io/socket.io.js'], function() {
     }
     this.hubId = hubId;
     this.memory = memory;
-    this.socket = io.connect('http://188.40.187.185:80/');
+    this.socket = io.connect('/');
     this.index = 0;
     this.registered = false;
 

@@ -6,7 +6,8 @@
   "author": "Manuel Kiessling (http://github.com/ManuelKiessling)",
   "engine": "node >= 0.6.14",
   "dependencies": {
-    "socket.io": "0.8.x"
+    "socket.io": "*",
+    "mime": "*"
   },
   "devDependencies": {
   }

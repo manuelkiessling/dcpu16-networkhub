@@ -161,7 +161,7 @@ define(['../lib/utility', '../lib/Memory', '../lib/Cpu', './Terminal', './Keyboa
     var instructionSet = '8001 8011 8061 8071 816c 9000 7dc1 0004 5811 9000 0501 8000 7d71 6080 xxxx 8472 0571 6080 8472 8161 9000 8402 8462 c06c 8061 7c7c 0080 8071 7dc1 0004'.split(" ");
     instructionSet[14] = receiverHubId;
     $('#hexinstructions').html(instructionSet.join("\n"));
-    $('#receivernote').html('Type messages in this window. Open <a href="http://manuel.kiessling.net/dcpu16networkdemo/index.html?hubId=' + parseInt(receiverHubId, 16) + '" target="_blank">the receiver machine</a> in another window to see how messages are received.');
+    $('#receivernote').html('Type messages in this window. Open <a href="/index.html?hubId=' + parseInt(receiverHubId, 16) + '" target="_blank">the receiver machine</a> in another window to see how messages are received.');
     reset();
     runInterval = setInterval(function() {
       updateRegisterAndMemoryInfo();
