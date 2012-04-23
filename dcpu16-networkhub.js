@@ -2,7 +2,7 @@ var util = require('util');
 var httpd = require('http').createServer(handler);
 var io = require('socket.io').listen(httpd);
 
-httpd.listen(8080);
+httpd.listen(80);
 
 function handler(req, res) {
   //
@@ -15,7 +15,7 @@ io.sockets.on('connection', function (socket) {
   var hubId;
   socket.on('register', function(theHubId, fn) {
     theHubId = parseInt(theHubId, 10);
-    if (theHubId <= 0 || theHubId > 0xfff) {
+    if (theHubId <= 0 || theHubId > 0xffff) {
       console.log('invalid hub id ' + theHubId);
       return;
     }

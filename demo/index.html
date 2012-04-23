@@ -50,52 +50,28 @@
 
     <div id="hexprogram">
       Hex instructions:<br>
-      <textarea id="hexinstructions">7de1
+      <textarea id="hexinstructions">8001  0000  SET A 0
+8011  0001  SET B 0
+8061  0002  SET I 0
+816c  0003  :loop IFE [0x6001+I] 0
+6001
+7dc1  0005  SET PC loop
+0003
+5811  0007  SET B [0x6001+I]
+6001
+0501  0009  SET [0x8000+A] B
 8000
-0048
-7de1
-8001
-0065
-7de1
-8002
-006c
-7de1
-8003
-006c
-7de1
-8004
-006f
-7de1
-8005
-002c
-7de1
-8006
-0020
-7de1
-8007
-0077
-7de1
-8008
-006f
-7de1
-8009
-0072
-7de1
-800a
-006c
-7de1
-800b
-0064
-7de1
-800c
-0021
-7dc1
-0029
-7de1
-1000
-fff0
-7dc1
-1000</textarea>
+8161  000b  SET [0x6000+I] 0
+6000
+8161  000d  SET [0x6001+I] 0
+6001
+8862  000f  ADD I 2
+8402  0010  ADD A 1
+7c6c  0011  IFE I 128
+0080
+8061  0013  SET I 0
+7dc1  0014  SET PC loop
+0003</textarea>
       <br>
       <input id="reset" type="button" value="Reset + load code">
       <input id="step" type="button" value="Step">
@@ -106,6 +82,7 @@ fff0
     <div id="registers">
       Registers:
       <div id="registervalues" class="pre"></div>
+      <div id="receivernote"></div>
     </div>
 
     <div id="memory">
