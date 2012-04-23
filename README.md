@@ -45,7 +45,7 @@ machine works as follows:
 
 Whenever the emulator receives a packet from the hub, it writes the id of the
 sender to the machines memory at [0x6000+index], and the data to
-[0x6000+index+1], and then increases index by 1.
+[0x6000+index+1], and then increases index by 2.
 This memory area works as a ring buffer, i.e., after writing to [0x607f],
 subsequent writing starts at [0x6000] again.
 
