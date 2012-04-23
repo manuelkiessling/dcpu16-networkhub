@@ -1,0 +1,444 @@
+:loop ADD A, 10
+IFN A, 20
+ADD B, 1
+SET PC, loop
+
+a802
+d00d
+8412
+7dc1
+0000
+
+
+
+SET B, 10
+:loop ADD A, 3
+IFG A, B
+ADD B, 4
+SET PC, loop
+
+a811
+8c02
+040e
+9012
+7dc1
+0001
+
+
+
+
+
+SET A, 4
+SET B, 5
+DIV A, B
+
+9001
+9411
+0405
+
+
+
+SET A, 20
+SET B, 5
+DIV A, B
+
+d001
+9411
+0405
+
+
+
+
+
+
+; Try some basic stuff
+                      SET A, 0x30              ; 7c01 0030
+                      SET [0x1000], 0x20       ; 7de1 1000 0020
+                      SUB A, [0x1000]          ; 7803 1000
+                      IFN A, 0x10              ; c00d
+                         SET PC, crash         ; 7dc1 001a [*]
+
+        ; Do a loopy thing
+                      SET I, 10                ; a861
+                      SET A, 0x2000            ; 7c01 2000
+        :loop         SET [0x2000+I], [A]      ; 2161 2000
+                      SUB I, 1                 ; 8463
+                      IFN I, 0                 ; 806d
+                         SET PC, loop          ; 7dc1 000d [*]
+
+        ; Call a subroutine
+                      SET X, 0x4               ; 9031
+                      JSR testsub              ; 7c10 0018 [*]
+                      SET PC, crash            ; 7dc1 001a [*]
+
+        :testsub      SHL X, 4                 ; 9037
+                      SET PC, POP              ; 61c1
+
+        ; Hang forever. X should now be 0x40 if everything went right.
+        :crash        SET PC, crash            ; 7dc1 001a [*]
+
+7c01  0000  SET A 0x30
+0030
+7de1  0002  SET [0x1000] 0x20
+1000
+0020
+7803  0005  SUB A [0x1000]
+1000
+c00d  0007  IFN A 0x10
+7dc1  0008  SET PC crash
+001a
+a861  000a  SET I 10
+7c01  000b  SET A 0x2000
+2000
+2161  000d  :loop SET [0x2000+I] [A]
+2000
+8463  000f  SUB I 1
+806d  0010  IFN I 0
+7dc1  0011  SET PC loop
+000d
+9031  0013  SET X 0x4
+7c10  0014  JSR testsub
+0018
+7dc1  0016  SET PC crash
+001a
+9037  0018  :testsub SHL X 4
+61c1  0019  SET PC POP
+7dc1  001a  :crash SET PC crash
+001a
+
+
+
+
+
+
+
+JSR testsub
+SET A, 5
+SET PC, end
+:testsub SET B, 4
+SET PC, POP
+:end SET C, 3
+
+7c10
+0005
+9401
+7dc1
+0007
+9011
+61c1
+8c21
+
+
+
+
+
+
+
+
+
+
+
+
+;pseudorandom a.k.a. ASCII barf
+;Author: Gleesus
+
+;A - position to write to
+SET A, 0x01f1
+
+;B - char code to write to A
+SET B, 0x22
+
+:print
+SET [0x8000+A], B
+
+; A = ((65521 * A + 57143) % 512)
+MUL A, 0xfff1
+ADD A, 0xdf37
+MOD A, 0x0200
+
+
+; Increment B, but keep it
+; within the printable ASCII chars
+ADD B, 0x01
+IFE B, 0x7f
+   SET B, 0x21
+
+SET PC, print
+
+
+
+7c01  0000  SET A 0x01f1
+01f1
+7c11  0002  SET B 0x22
+0022
+0501  0004  :print SET [0x8000+A] B
+8000
+7c04  0006  MUL A 0xfff1
+fff1
+7c02  0008  ADD A 0xdf37
+df37
+7c06  000a  MOD A 0x0200
+0200
+8412  000c  ADD B 0x01
+7c1c  000d  IFE B 0x7f
+007f
+7c11  000f  SET B 0x21
+0021
+7dc1  0011  SET PC print
+0004
+
+7c01
+01f1
+7c11
+0022
+0501
+8000
+7c04
+fff1
+7c02
+df37
+7c06
+0200
+8412
+7c1c
+007f
+7c11
+0021
+7dc1
+0004
+
+
+
+; Typeecho
+
+SET A, 0
+SET B, 0
+SET C, 0xF000
+SET I, 0
+:loop
+IFE [0x9000+I], 0
+ SET PC, loop
+SET B, [0x9000+I]
+;BOR B,C
+SET [0x8000+A], B
+SET [0x9000+I], 0
+ADD A, 1
+ADD I, 1
+IFE I, 16
+ SET I, 0
+SET PC, loop
+
+8001  0000  SET A 0
+8011  0001  SET B 0
+7c21  0002  SET C 0xF000
+f000
+8061  0004  SET I 0
+816c  0005  :loop IFE [0x9000+I] 0
+9000
+7dc1  0007  SET PC loop
+0005
+5811  0009  SET B [0x9000+I]
+9000
+0501  000b  SET [0x8000+A] B
+8000
+8161  000d  SET [0x9000+I] 0
+9000
+8402  000f  ADD A 1
+8462  0010  ADD I 1
+c06c  0011  IFE I 16
+8061  0012  SET I 0
+7dc1  0013  SET PC loop
+0005
+
+
+; Terminal
+
+7de1
+8000
+0048
+7de1
+8001
+0065
+7de1
+8002
+006c
+7de1
+8003
+006c
+7de1
+8004
+006f
+7de1
+8005
+002c
+7de1
+8006
+0020
+7de1
+8007
+0077
+7de1
+8008
+006f
+7de1
+8009
+0072
+7de1
+800a
+006c
+7de1
+800b
+0064
+7de1
+800c
+0021
+7dc1
+0029
+7de1
+1000
+fff0
+7dc1
+1000
+
+8001  0000  SET A 0
+8011  0001  SET B 0
+7c21  0002  SET C 0xF000
+f000
+8061  0004  SET I 0
+816c  0005  :loop IFE [0x9000+I] 0
+9000
+7dc1  0007  SET PC loop
+0005
+5811  0009  SET B [0x9000+I]
+9000
+0501  000b  SET [0x8000+A] B
+8000
+8161  000d  SET [0x9000+I] 0
+9000
+8402  000f  ADD A 1
+8462  0010  ADD I 1
+c06c  0011  IFE I 16
+8061  0012  SET I 0
+7dc1  0013  SET PC loop
+0005
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; Networking
+
+; send everything that is typed to hub id #2
+SET A, 0 ; terminal index
+SET B, 0
+SET I, 0 ; keyboard index
+SET J, 0 ; network index
+:loop
+IFE [0x9000+I], 0
+ SET PC, loop
+SET B, [0x9000+I]
+SET [0x8000+A], B ; write to terminal
+SET [0x6080+J], 2 ; receiver is #2
+ADD J, 1
+SET [0x6080+J], B ; set network data
+ADD J, 1
+SET [0x9000+I], 0
+ADD A, 1
+ADD I, 1
+IFE I, 16 ; cycle keyboard index
+ SET I, 0
+IFE J, 128 ; cycle network index
+ SET J, 0
+SET PC, loop
+
+8001  0000  SET A 0
+8011  0001  SET B 0
+8061  0002  SET I 0
+8071  0003  SET J 0
+816c  0004  :loop IFE [0x9000+I] 0
+9000
+7dc1  0006  SET PC loop
+0004
+5811  0008  SET B [0x9000+I]
+9000
+0501  000a  SET [0x8000+A] B
+8000
+8971  000c  SET [0x6080+J] 2
+6080
+8472  000e  ADD J 1
+0571  000f  SET [0x6080+J] B
+6080
+8472  000e  ADD J 1
+8161  0011  SET [0x9000+I] 0
+9000
+8402  0013  ADD A 1
+8462  0014  ADD I 1
+c06c  0015  IFE I 16
+8061  0016  SET I 0
+7c7c  0017  IFE J 128
+0080
+8071  0019  SET J 0
+7dc1  001a  SET PC loop
+0004
+
+
+
+
+; echo everything that is received on the wire
+SET A, 0
+SET B, 0
+SET I, 0
+:loop
+IFE [0x6001+I], 0
+ SET PC, loop
+SET B, [0x6001+I]
+SET [0x8000+A], B
+SET [0x6000+I], 0
+SET [0x6001+I], 0
+ADD I, 2
+ADD A, 1
+IFE I, 128
+ SET I, 0
+SET PC, loop
+
+8001  0000  SET A 0
+8011  0001  SET B 0
+8061  0002  SET I 0
+816c  0003  :loop IFE [0x6001+I] 0
+6001
+7dc1  0005  SET PC loop
+0003
+5811  0007  SET B [0x6001+I]
+6001
+0501  0009  SET [0x8000+A] B
+8000
+8161  000b  SET [0x6000+I] 0
+6000
+8161  000d  SET [0x6001+I] 0
+6001
+8862  000f  ADD I 2
+8402  0010  ADD A 1
+7c6c  0011  IFE I 128
+0080
+8061  0013  SET I 0
+7dc1  0014  SET PC loop
+0003
+

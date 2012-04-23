@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="./vendor/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="./vendor/require-1.0.7/require.js" data-main="./app/index" ></script>
+    <style>
+      body {
+        font-family: Verdana, Arial, sans-serif;
+      }
+      .pre {
+        font-family: "Courier New";
+        white-space: pre;
+      }
+      .currentinstruction {
+        text-decoration: underline;
+      }
+      #hexprogram, #registers, #memory, #console {
+        float: left;
+        margin: 20px;
+      }
+      #hexprogram {
+        width: 150px;
+      }
+      #hexinstructions {
+        width: 140px;
+        height: 200px;
+      }
+      #registers {
+        width: 360px;
+      }
+      #memory {
+        width: 440px;
+      }
+      #console {
+        width: 320px;
+      }
+      #consoleoutput {
+        background-color: #002200;
+        color: #00ee00;
+        padding: 4px;
+        height: 226px;
+        width: 320px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <a href="https://github.com/ManuelKiessling/jsDCPU16">Fork me on Github</a>
+
+    <div id="hexprogram">
+      Hex instructions:<br>
+      <textarea id="hexinstructions">7de1
+8000
+0048
+7de1
+8001
+0065
+7de1
+8002
+006c
+7de1
+8003
+006c
+7de1
+8004
+006f
+7de1
+8005
+002c
+7de1
+8006
+0020
+7de1
+8007
+0077
+7de1
+8008
+006f
+7de1
+8009
+0072
+7de1
+800a
+006c
+7de1
+800b
+0064
+7de1
+800c
+0021
+7dc1
+0029
+7de1
+1000
+fff0
+7dc1
+1000</textarea>
+      <br>
+      <input id="reset" type="button" value="Reset + load code">
+      <input id="step" type="button" value="Step">
+      <input id="run" type="button" value="Run">
+      <input id="stop" type="button" value="Stop">
+    </div>
+
+    <div id="registers">
+      Registers:
+      <div id="registervalues" class="pre"></div>
+    </div>
+
+    <div id="memory">
+      Memory:
+      <div id="memoryvalues" class="pre"></div>
+    </div>
+
+    <div id="console">
+      Console (32x12):
+      <div id="consoleoutput" class="pre"></div>
+      (write ASCII to 0x8000-0x817f)
+    </div>
+
+  </body>
+</html>
