@@ -119,3 +119,10 @@ the network to the console:
     IFE I, 128
      SET I, 0
     SET PC, loop
+
+Feel free to use ws://188.40.187.185:80/ as the hub for you emulator Network Interface Card.
+
+## Get in touch
+
+Find me on Twitter as [@manuelkiessling](https://twitter.com/manuelkiessling)
+or send me an email at [manuel@kiessling.net](mailto:manuel@kiessling.net)
