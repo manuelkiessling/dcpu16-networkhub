@@ -21,6 +21,8 @@ and echoes it to its console, and puts in on the network wire.
 The second machine puts up everything that arrives on the wire and
 displays it in its console.
 
+__Note:__ Looks like there is currently a problem with the demo, I'm looking into it.
+
 
 ## Caveats
 
