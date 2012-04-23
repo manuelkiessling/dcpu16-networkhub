@@ -52,7 +52,70 @@ subsequent writing starts at [0x6000] again.
 Whenever the machine writes data between addresses [0x6080] and [0x60ff], the
 emulator must pick up this data, interpreting every even field as the hub id of
 the receiver, and every uneven field as the payload, i.e., when data is written
-to [0x6081], the emulator uses [0x6080] as the hub id, and [0x6081] as the data.
+to [0x6081], the emulator uses [0x6080] as the hub id, and [0x6081] as the data
+.
 
-The receiver hub id & data packet is then send to the hub, who delivers it to the emulator
-which is connected at the receiver id in question.
+The receiver hub id & data packet is then send to the hub, who delivers it to
+the emulator which is connected at the receiver id in question.
+
+Currently, the is basically no security whatsoever, however, you use hub
+connections that are already in use.
+
+## Example code / How to use it
+
+If you want to use make use of the network from your DCPU-16 machine, you must
+extend your emulator, that is, you must write a virtual Network Interface card
+that is able to register with the hub, read memory data that is written to
+[0x6080]-[0x60ff] and send it to the hub, and handles incoming hub data by
+writing it to [0x6000]-[0x607f].
+
+This virtual NIC must speak the WebSockets protocol to connect to the hub. This
+is relatively in JavaScript using Socket.io, but should be doable in other
+implementation, too.
+
+An example NIC can be found at:
+https://github.com/ManuelKiessling/jsDCPU16/blob/2f62c17a3d0ec1cf7a9e816a4924213882c35e71/app/NetworkInterfaceCard.js#L1
+
+This is an example DCPU-16 assembler application that sends every keyboard input
+to hub id 2:
+
+    SET A, 0 ; terminal index
+    SET B, 0
+    SET I, 0 ; keyboard index
+    SET J, 0 ; network index
+    :loop
+    IFE [0x9000+I], 0
+     SET PC, loop
+    SET B, [0x9000+I]
+    SET [0x8000+A], B ; write to terminal
+    SET [0x6080+J], 6500 ; receiver hub id
+    ADD J, 1
+    SET [0x6080+J], B ; set network data
+    ADD J, 1
+    SET [0x9000+I], 0
+    ADD A, 1
+    ADD I, 1
+    IFE I, 16 ; cycle keyboard index
+     SET I, 0
+    IFE J, 128 ; cycle network index
+     SET J, 0
+    SET PC, loop
+
+And this is an example application that echoes everything which is received on
+the network to the console:
+
+    SET A, 0
+    SET B, 0
+    SET I, 0
+    :loop
+    IFE [0x6001+I], 0
+     SET PC, loop
+    SET B, [0x6001+I]
+    SET [0x8000+A], B
+    SET [0x6000+I], 0
+    SET [0x6001+I], 0
+    ADD I, 2
+    ADD A, 1
+    IFE I, 128
+     SET I, 0
+    SET PC, loop
